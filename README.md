@@ -1,5 +1,12 @@
 # Using SQL for GIS analysis with PostGIS
 
+### Contents
+1. [Importing shapefiles into PostGIS](https://github.com/arianagiorgi/postgis-intro#importing-shapefiles-into-postgis)
+2. [Viewing tables in QGIS](https://github.com/arianagiorgi/postgis-intro#viewing-queries-in-qgis)
+3. [Spatial queries](https://github.com/arianagiorgi/postgis-intro#spatial-queries)
+4. [Exporting query results](https://github.com/arianagiorgi/postgis-intro#exporting-query-results)
+
+
 ### Requirements
 * PostgreSQL
 * PostGIS
@@ -11,6 +18,7 @@
 * [Texas schools](https://schoolsdata2-tea-texas.opendata.arcgis.com/datasets/059432fd0dcb4a208974c235e837c94f_0) from Texas Education Agency
 * [Texas school districts](http://schoolsdata2-tea-texas.opendata.arcgis.com/datasets/e115fed14c0f4ca5b942dc3323626b1c_0) from Texas Education Agency
 * Census Tracts: [Shapefiles](https://www.census.gov/geo/maps-data/data/tiger-line.html) and [ACS data](https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml) from Census Bureau
+
 
 ## Importing shapefiles into PostGIS
 
@@ -28,20 +36,20 @@
 
 3. Use `shp2pgsql` command to write a SQL file that will contain table and data information for PostgreSQL to upload:
 ```
-$ shp2pgsql -c -s <SRID> -g geom -I <path to shp file>.shp \
+$ shp2pgsql -s <SRID> -I <path to shp file>.shp \
  <new postgres table name> > <path to output sql file>.sql
 ```
 So our commands to upload all tables will look like:
 ```
-$ shp2pgsql -c -s 4326 -g geom -I data/texas-schools/texas-schools.shp \
- schools > texas-schools.sql
+$ shp2pgsql -s 4326 -I data/schools/schools.shp \
+ schools > schools.sql
 ```
 ```
-$ shp2pgsql -c -s 4326 -g geom -I data/texas-school-districts/texas-school-districts.shp \
- districts > texas-school-districts.sql
+$ shp2pgsql -s 4326 -I data/school-districts/school-districts.shp \
+ districts > school-districts.sql
  ```
  ```
-$ shp2pgsql -c -s 4326 -g geom -I data/census-tracts/census-tracts.shp \
+$ shp2pgsql -s 4326 -I data/census-tracts/census-tracts.shp \
  tracts > census-tracts.sql
 ```
 Then we'll upload the sql file to the database we created:
@@ -50,14 +58,21 @@ $ psql -d <database> -f <path to output sql file>.sql
 ```
 Our commands will look like:
 ```
-$ psql -d postgis_intro -f texas-schools.sql
+$ psql -d postgis_intro -f schools.sql
 ```
 ```
-$ psql -d postgis_intro -f texas-school-districts.sql
+$ psql -d postgis_intro -f school-districts.sql
 ```
 ```
 $ psql -d postgis_intro -f census-tracts.sql
 ```
+
+## Viewing tables in QGIS
+1. In the Browser Panel (along left side), right click "PostGIS" and select "New Connection..."
+2. Enter connection information and then click "OK".
+3. Now from the PostGIS tab in the Browser Panel, you'll be able to expand the PostGIS tab to view tables with geometries from your database. You can double click on the table to view it.
+4. In Layers Panel, right click the layer from the table and select "Update SQL Layer..."
+5. You can write your PostGIS query in the editor line and hit "Execute" to view the results and once you click the "Update" button, you'll see only the results of the query shown.
 
 ## Spatial queries
 
@@ -122,12 +137,7 @@ SELECT campname, ST_Buffer(geom::GEOGRAPHY, 1000)
 FROM schools
 ORDER BY campname;
 ```
-## Viewing queries in QGIS
-1. In the Browser Panel (along left side), right click "PostGIS" and select "New Connection..."
-2. Enter connection information and then click "OK".
-3. Now from the PostGIS tab in the Browser Panel, you'll be able to expand the PostGIS tab to view tables with geometries from your database. You can double click on the table to view it.
-4. In Layers Panel, right click the layer from the table and select "Update SQL Layer..."
-5. You can write your PostGIS query in the editor line and once you click the "Update" button, you'll see only the results of the query shown.
+
 
 #### Spatial relationships
 
@@ -238,7 +248,7 @@ $ pgsql2shp -f <path to new shapefile> -g <geometry column in table> <database> 
 Here is an example of what ours might look like, if we wanted only Dallas and Forth Worth school districts from the `districts` table:
 ```
 $ pgsql2shp -f filter-query.shp -g geom postgis_intro \
- "select * from \"districts\" where where name in ('Dallas ISD', 'Fort Worth ISD')"
+ "select * from districts where name in ('Dallas ISD', 'Fort Worth ISD')"
 ```
 
 ### Exporting with ogr2ogr
@@ -253,7 +263,7 @@ $ ogr2ogr -f "<filetype>" <path to output file> \
 
 If we wanted to export the entire `districts` table:
 ```
-$ ogr2ogr -f "GeoJSON" tx-school-districts.json \
+$ ogr2ogr -f "GeoJSON" school-districts.json \
  PG:"host=localhost dbname='postgis_intro'" \
- -sql "select * from \"districts\";"
+ -sql "select * from districts;"
  ```
