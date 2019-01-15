@@ -8,8 +8,8 @@
 
 ### Data included
 * [Texas schools](https://schoolsdata2-tea-texas.opendata.arcgis.com/datasets/059432fd0dcb4a208974c235e837c94f_0) from Texas Education Agency
-* Census Tracts
-* Counties
+* Census Tracts: [Shapefiles](https://www.census.gov/geo/maps-data/data/tiger-line.html) and [ACS data](https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml) from Census Bureau
+* [Counties](https://github.com/TNRIS/tx.geojson/tree/master/source) from Texas Natural Resources Information System
 
 ## Importing shapefiles into PostGIS
 
@@ -27,7 +27,7 @@
 
 3. Use `shp2pgsql` command to write a SQL file that will contain table and data information for PostgreSQL to upload:
 ```
-$ shp2pgsql -c -s [SRID] -g geom -I [your_shp_file].shp [new_postgres_table_name] > [output_sql_file_name].sql
+$ shp2pgsql -c -s <SRID> -g geom -I <your_shp_file>.shp <new_postgres_table_name> > <output_sql_file_name>.sql
 ```
 So our command will look like:
 ```
@@ -35,7 +35,7 @@ $ shp2pgsql -c -s 4326 -g geom -I texas-schools.shp texas-schools > texas-school
 ```
 Then we'll upload the sql file to the database we created:
 ```
-$ psql -d [target_database] -f [output_sql_file_name].sql
+$ psql -d <target_database> -f <output_sql_file_name>.sql
 ```
 Our command will look like:
 ```
