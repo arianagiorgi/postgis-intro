@@ -1,20 +1,20 @@
 # Using SQL for GIS analysis with PostGIS
 
-### Contents
+## Contents
 1. [Importing shapefiles into PostGIS](https://github.com/arianagiorgi/postgis-intro#importing-shapefiles-into-postgis)
 2. [Viewing tables in QGIS](https://github.com/arianagiorgi/postgis-intro#viewing-tables-in-qgis)
 3. [Spatial queries](https://github.com/arianagiorgi/postgis-intro#spatial-queries)
 4. [Exporting query results](https://github.com/arianagiorgi/postgis-intro#exporting-query-results)
 
 
-### Requirements
+## Requirements
 * PostgreSQL
 * PostGIS
 * Postico
 * QGIS 3
 * ogr2ogr (for exporting, if applicable)
 
-### Data included
+## Data included
 * [Texas schools](https://schoolsdata2-tea-texas.opendata.arcgis.com/datasets/059432fd0dcb4a208974c235e837c94f_0) from Texas Education Agency
 * [Texas school districts](http://schoolsdata2-tea-texas.opendata.arcgis.com/datasets/e115fed14c0f4ca5b942dc3323626b1c_0) from Texas Education Agency
 * Census Tracts: [Shapefiles](https://www.census.gov/geo/maps-data/data/tiger-line.html) and [ACS data](https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml) from Census Bureau
@@ -80,7 +80,7 @@ $ psql -d postgis_intro -f census-tracts.sql
 
 PostGIS adds almost 300 new functions and operators to PostgreSQL that can do everything from basic spatial calculations to complex aggregations. It's easy to recognize these new functions because they all use the `ST_` prefix (for spatial type), as you'll see below:
 
-#### Basic calculations
+### Basic calculations
 
 Many functions perform simple calculations on a single geometry or pair of geometries. For example, we can see the area of each of our census tracts using the `ST_Area` function:
 
@@ -112,7 +112,7 @@ ORDER BY id;
 
 We now get an answer of _491172828.83503_ (square meters).
 
-#### Deriving new geometries
+### Deriving new geometries
 
 Some functions can calculate new geometries based on your existing ones. For example, we can get the centroid of all of our census tracts using:
 
@@ -141,7 +141,7 @@ ORDER BY campname;
 ```
 
 
-#### Spatial relationships
+### Spatial relationships
 
 We really start to see the power of spatial queries when we start to use PostGIS to join and filter out tables based on spatial relationship. For example, we can perform a point-in-polygon query to determine the district that each of our schools is in using the `ST_Contains` function:
 
@@ -199,7 +199,7 @@ Note that there are only about 5,000 census tracts in the state. But the above q
 
 _See [here](http://postgis.net/workshops/postgis-intro/spatial_relationships.html) for a complete list of the relationship functions._
 
-#### Aggregations
+### Aggregations
 
 We can take what we've learned above about spatial relationships and use it to relate data about our census tracts to our school districts. For example, we can take tract-level data and use it to calculate district-level data.
 
