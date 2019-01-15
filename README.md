@@ -73,8 +73,8 @@ $ psql -d postgis_intro -f census-tracts.sql
 2. Enter connection information and then click "OK".
 3. You can now access the database's tables in the database manager, which is accessible by clicking "Database" in the menu and choosing "DB Manager...".
 4. In the DB manager you now have two choices:
-  - You can add the entire table, as-is, by double-clicking it.
-  - You can query the database using SQL and add the query result by opening the "SQL window". To write a query, click the second icon in the DB manager toolbar (it looks like a piece of paper with a wrench on it). Enter your query in that window and use the options at the bottom of the pane to add it to your project.
+    - You can add the entire table, as-is, by double-clicking it.
+    - You can query the database using SQL and add the query result by opening the "SQL window". To write a query, click the second icon in the DB manager toolbar (it looks like a piece of paper with a wrench on it). Enter your query in that window and use the options at the bottom of the pane to add it to your project.
 
 ## Spatial queries
 
