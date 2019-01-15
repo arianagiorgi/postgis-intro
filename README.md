@@ -34,15 +34,15 @@ $ shp2pgsql -c -s <SRID> -g geom -I <path to shp file>.shp \
 So our commands to upload all tables will look like:
 ```
 $ shp2pgsql -c -s 4326 -g geom -I data/texas-schools/texas-schools.shp \
- texas-schools > texas-schools.sql
+ schools > texas-schools.sql
 ```
 ```
 $ shp2pgsql -c -s 4326 -g geom -I data/texas-school-districts/texas-school-districts.shp \
- texas-school-districts > texas-school-districts.sql
+ districts > texas-school-districts.sql
  ```
  ```
 $ shp2pgsql -c -s 4326 -g geom -I data/census-tracts/census-tracts.shp \
- census-tracts > census-tracts.sql
+ tracts > census-tracts.sql
 ```
 Then we'll upload the sql file to the database we created:
 ```
@@ -59,23 +59,6 @@ $ psql -d postgis_intro -f texas-school-districts.sql
 $ psql -d postgis_intro -f census-tracts.sql
 ```
 
-### Exporting with ogr2ogr
-This is a good option if you want to go straight from PostGIS to a file other than a shapefile (think GeoJSON for a D3 viz or to load into Mapbox).
-
-Here is a typical command:
-```
-$ ogr2ogr -f "<filetype>" <path to output file> \
- PG:"host=<host> dbname='<database>'" \
- -sql "<query>";"
-```
-
-If we wanted to export the entire `texas-school-districts` table:
-```
-$ ogr2ogr -f "GeoJSON" tx-school-districts.json \
- PG:"host=localhost dbname='postgis_intro'" \
- -sql "select * from \"texas-school-districts\";"
-=======
-
 ## Spatial queries
 
 PostGIS adds almost 300 new functions and operators to PostgreSQL that can do everything from basic spatial calculations to complex aggregations. It's easy to recognize these new functions because they all use the `ST_` prefix (for spatial type), as you'll see below:
@@ -86,7 +69,7 @@ Many functions perform simple calculations on a single geometry or pair of geome
 
 ```sql
 SELECT name, ST_Area(geom)
-FROM census_tracts
+FROM tracts
 ORDER BY id;
 ```
 
@@ -96,7 +79,7 @@ If we had been using, say, [NAD83 / Texas South Central](https://epsg.io/2278), 
 
 ```sql
 SELECT name, ST_Area(ST_Transform(geom, 2278))
-FROM census_tracts
+FROM tracts
 ORDER BY id;
 ```
 
@@ -106,7 +89,7 @@ We can also solve this problem using [`Geography`s](https://postgis.net/docs/usi
 
 ```sql
 SELECT name, ST_Area(geom::GEOGRAPHY)
-FROM census_tracts
+FROM tracts
 ORDER BY id;
 ```
 
@@ -118,7 +101,7 @@ Some functions can calculate new geometries based on your existing ones. For exa
 
 ```sql
 SELECT name, ST_Centroid(geom)
-FROM census_tracts
+FROM tracts
 ORDER BY id;
 ```
 
@@ -255,5 +238,22 @@ $ pgsql2shp -f <path to new shapefile> -g <geometry column in table> <database> 
 Here is an example of what ours might look like, if we wanted only Dallas and Forth Worth school districts from the `texas-school-districts` table:
 ```
 $ pgsql2shp -f filter-query.shp -g geom postgis_intro \
- "select * from \"texas-school-districts\" where where name in ('Dallas ISD', 'Fort Worth ISD')"
+ "select * from \"districts\" where where name in ('Dallas ISD', 'Fort Worth ISD')"
 ```
+
+### Exporting with ogr2ogr
+This is a good option if you want to go straight from PostGIS to a file other than a shapefile (think GeoJSON for a D3 viz or to load into Mapbox).
+
+Here is a typical command:
+```
+$ ogr2ogr -f "<filetype>" <path to output file> \
+ PG:"host=<host> dbname='<database>'" \
+ -sql "<query>";"
+```
+
+If we wanted to export the entire `texas-school-districts` table:
+```
+$ ogr2ogr -f "GeoJSON" tx-school-districts.json \
+ PG:"host=localhost dbname='postgis_intro'" \
+ -sql "select * from \"districts\";"
+ ```
