@@ -2,7 +2,7 @@
 
 ### Contents
 1. [Importing shapefiles into PostGIS](https://github.com/arianagiorgi/postgis-intro#importing-shapefiles-into-postgis)
-2. [Viewing tables in QGIS](https://github.com/arianagiorgi/postgis-intro#viewing-queries-in-qgis)
+2. [Viewing tables in QGIS](https://github.com/arianagiorgi/postgis-intro#viewing-tables-in-qgis)
 3. [Spatial queries](https://github.com/arianagiorgi/postgis-intro#spatial-queries)
 4. [Exporting query results](https://github.com/arianagiorgi/postgis-intro#exporting-query-results)
 
@@ -68,11 +68,13 @@ $ psql -d postgis_intro -f census-tracts.sql
 ```
 
 ## Viewing tables in QGIS
-1. In the Browser Panel (along left side), right click "PostGIS" and select "New Connection..."
+
+1. In the Browser Panel (along left side), right click "PostGIS" and select "New Connection...".
 2. Enter connection information and then click "OK".
-3. Now from the PostGIS tab in the Browser Panel, you'll be able to expand the PostGIS tab to view tables with geometries from your database. You can double click on the table to view it.
-4. In Layers Panel, right click the layer from the table and select "Update SQL Layer..."
-5. You can write your PostGIS query in the editor line and hit "Execute" to view the results and once you click the "Update" button, you'll see only the results of the query shown.
+3. You can now access the database's tables in the database manager, which is accessible by clicking "Database" in the menu and choosing "DB Manager...".
+4. In the DB manager you now have two choices:
+  - You can add the entire table, as-is, by double-clicking it.
+  - You can query the database using SQL and add the query result by opening the "SQL window". To write a query, click the second icon in the DB manager toolbar (it looks like a piece of paper with a wrench on it). Enter your query in that window and use the options at the bottom of the pane to add it to your project.
 
 ## Spatial queries
 
