@@ -31,20 +31,33 @@
 $ shp2pgsql -c -s <SRID> -g geom -I <path to shp file>.shp \
  <new postgres table name> > <path to output sql file>.sql
 ```
-So our command will look like:
+So our commands to upload all tables will look like:
 ```
-$ shp2pgsql -c -s 4326 -g geom -I texas-schools.shp \
+$ shp2pgsql -c -s 4326 -g geom -I data/texas-schools/texas-schools.shp \
  texas-schools > texas-schools.sql
+```
+```
+$ shp2pgsql -c -s 4326 -g geom -I data/texas-school-districts/texas-school-districts.shp \
+ texas-school-districts > texas-school-districts.sql
+ ```
+ ```
+$ shp2pgsql -c -s 4326 -g geom -I data/census-tracts/census-tracts.shp \
+ census-tracts > census-tracts.sql
 ```
 Then we'll upload the sql file to the database we created:
 ```
 $ psql -d <database> -f <path to output sql file>.sql
 ```
-Our command will look like:
+Our commands will look like:
 ```
 $ psql -d postgis_intro -f texas-schools.sql
 ```
-
+```
+$ psql -d postgis_intro -f texas-school-districts.sql
+```
+```
+$ psql -d postgis_intro -f census-tracts.sql
+```
 ## Viewing queries in QGIS
 1. In the Browser Panel (along left side), right click "PostGIS" and select "New Connection..."
 2. Enter connection information and then click "OK".
