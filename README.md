@@ -235,7 +235,7 @@ The pgsql2shp command to call from the terminal will look like:
 ```
 $ pgsql2shp -f <path to new shapefile> -g <geometry column in table> <database> "<query>"
 ```
-Here is an example of what ours might look like, if we wanted only Dallas and Forth Worth school districts from the `texas-school-districts` table:
+Here is an example of what ours might look like, if we wanted only Dallas and Forth Worth school districts from the `districts` table:
 ```
 $ pgsql2shp -f filter-query.shp -g geom postgis_intro \
  "select * from \"districts\" where where name in ('Dallas ISD', 'Fort Worth ISD')"
@@ -251,7 +251,7 @@ $ ogr2ogr -f "<filetype>" <path to output file> \
  -sql "<query>";"
 ```
 
-If we wanted to export the entire `texas-school-districts` table:
+If we wanted to export the entire `districts` table:
 ```
 $ ogr2ogr -f "GeoJSON" tx-school-districts.json \
  PG:"host=localhost dbname='postgis_intro'" \
