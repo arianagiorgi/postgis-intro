@@ -233,7 +233,7 @@ SELECT
   SUM(ST_Area(ST_Intersection(districts.geom, tracts.geom)) / ST_Area(tracts.geom) * tracts.age_undr18) AS under_18_pop
 FROM districts
 INNER JOIN tracts ON ST_Intersects(districts.geom, tracts.geom)
-GROUP BY districts.name
+GROUP BY districts.name;
 ```
 
 ## Exporting query results
