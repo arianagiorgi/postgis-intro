@@ -146,9 +146,9 @@ ORDER BY campname;
 We really start to see the power of spatial queries when we start to use PostGIS to join and filter out tables based on spatial relationship. For example, we can perform a point-in-polygon query to determine the district that each of our schools is in using the `ST_Contains` function:
 
 ```sql
-SELECT schools.campname, districts.name
+SELECT schools.campname, districts.name as district_name
 FROM schools
-LEFT JOIN counties ON ST_Contains(districts.geom, schools.geom);
+LEFT JOIN districts ON ST_Contains(districts.geom, schools.geom);
 ```
 
 Combined with a `GROUP BY`, we can now easily count the number of schools in each district:
@@ -211,10 +211,10 @@ SELECT
   tracts.id,
   ST_Area(ST_Intersection(districts.geom, tracts.geom)) / ST_Area(tracts.geom) AS overlap_pct
 FROM districts
-INNER JOIN tracts ON ST_Intersects(districts.geom, tracts.geom)
+INNER JOIN tracts ON ST_Intersects(districts.geom, tracts.geom);
 ```
 
-We can then use allocate that percentage of the under-18-year-olds in the census table to the school district:
+We can then allocate that percentage of the under-18-year-olds in the census table to the school district:
 
 ```sql
 SELECT
@@ -222,7 +222,7 @@ SELECT
   tracts.id,
   ST_Area(ST_Intersection(districts.geom, tracts.geom)) / ST_Area(tracts.geom) * tracts.age_undr18 AS under_18_pop
 FROM districts
-INNER JOIN tracts ON ST_Intersects(districts.geom, tracts.geom)
+INNER JOIN tracts ON ST_Intersects(districts.geom, tracts.geom);
 ```
 
 And by adding a `GROUP BY` we can get a district-wide estimate of the under-18 population:
@@ -233,7 +233,7 @@ SELECT
   SUM(ST_Area(ST_Intersection(districts.geom, tracts.geom)) / ST_Area(tracts.geom) * tracts.age_undr18) AS under_18_pop
 FROM districts
 INNER JOIN tracts ON ST_Intersects(districts.geom, tracts.geom)
-GROUP BY district.name
+GROUP BY districts.name
 ```
 
 ## Exporting query results
