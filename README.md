@@ -25,7 +25,7 @@
 1. Create database and enable PostGIS in your database. From the terminal, run:
 ```
   $ createdb postgis_intro
-  $ psql -d postgis_intro -c "CREATE EXTENSION postgis;"
+  $ psql --dbname postgis_intro --command "CREATE EXTENSION postgis;"
 ```
 
 2. Determine your project's SRID (see our glossary).
@@ -54,17 +54,17 @@ $ shp2pgsql -s 4326 -I data/census-tracts/census-tracts.shp \
 ```
 Then we'll upload the sql file to the database we created:
 ```
-$ psql -d <database> -f <path to output sql file>.sql
+$ psql --dbname <database> --file <path to output sql file>.sql
 ```
 Our commands will look like:
 ```
-$ psql -d postgis_intro -f schools.sql
+$ psql --dbname postgis_intro --file schools.sql
 ```
 ```
-$ psql -d postgis_intro -f school-districts.sql
+$ psql --dbname postgis_intro --file school-districts.sql
 ```
 ```
-$ psql -d postgis_intro -f census-tracts.sql
+$ psql --dbname postgis_intro --file census-tracts.sql
 ```
 
 ## Viewing tables in QGIS
